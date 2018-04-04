@@ -21,8 +21,21 @@ class Hangman
 
 
 	def user_input
-		print "Guess:"
+		puts "To guess type GUESS"
+		puts "To quit type QUIT"
+		puts "To save type SAVE"
 		$user_input = gets.chomp
+		if $user_input.downcase == "guess"
+			print "Guess:"
+			$user_input = gets.chomp
+		elsif $user_input.downcase == "quit"
+			exit
+		elsif $user_input.downcase == "save"
+				puts "SAVED"
+		else
+			puts "That is not a valid input" 
+			user_input
+		end
 	end
 
 	def draw_board
@@ -34,7 +47,7 @@ class Hangman
 			end
 		end
 		puts $current.join(" ")
-		puts "You have already guessed: #{$already_guessed}"
+		puts "Previously incorrect guesses: #{$already_guessed}"
 	end
 
 	def letter_checker
