@@ -6,6 +6,22 @@ class Hangman
 		$number_of_guesses = 6
 		$current = []
 		$already_guessed = []
+		$winning_word = []
+		
+		puts "Type NEW for new game"
+		puts "Type LOAD to load saved game"
+		new_load = gets.chomp
+		
+		if new_load.downcase == "new"
+			choose_word
+		elsif new_load.downcase == "load"
+			load_game
+		else
+			puts "Not a valid selection"
+		end
+	end
+
+	def choose_word
 		dictionary_array = []
 		valid_words = []
 		dictionary = File.read "dictionary.txt"
@@ -19,6 +35,16 @@ class Hangman
 		$winning_word = valid_words[rand(valid_words.length - 1)].split("")
 	end
 
+	def load_game
+		saved_variables = File.read "save.txt"
+		saved_variables.split("\n")
+		$number_of_guesses = saved_variables[0]
+		$winning_word = saved_variables[1].split(",")
+		$current = saved_variables[2].split(",")
+		puts $current
+		puts $winning_word
+		puts $number_of_guesses
+	end
 
 	def user_input
 		puts "To guess type GUESS"
@@ -31,6 +57,7 @@ class Hangman
 		elsif $user_input.downcase == "quit"
 			exit
 		elsif $user_input.downcase == "save"
+				file_save
 				puts "SAVED"
 		else
 			puts "That is not a valid input" 
@@ -134,7 +161,21 @@ class Hangman
 	    	exit
 	    end
 	end
+
+
+	def file_save
+		File.open("save.txt", "w+") { |file|
+			file.puts "#{$number_of_guesses}"
+			file.print $winning_word.each {|i| "#{i}"}\n
+			file.print $current.each {|i| "#{i}"}
+		}
+	end
 end
+
+
+
+
+
 
 instance = Hangman.new
 loop do
