@@ -1,0 +1,12 @@
+---
+:guesses: 6
+:winning:
+- o
+- p
+- a
+- q
+- u
+- e
+- l
+- y
+:current: []

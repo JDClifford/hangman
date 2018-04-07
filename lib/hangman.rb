@@ -1,3 +1,5 @@
+require "yaml"
+
 $number_of_guesses = 6
 $current = []
 $already_guessed = []
@@ -45,7 +47,6 @@ def user_input #Prompts the user to guess, save, or quit and takes input
 		exit
 	elsif $user_input.downcase == "save"
 			file_save
-			puts "SAVED"
 	else
 		puts "That is not a valid input" 
 		user_input
@@ -154,32 +155,29 @@ end
 
 #SAVING AND LOADING
 def file_save #Saves the current game to save.txt
-	File.open("save.txt", "w+") { |file|
-		file.puts "#{$number_of_guesses}"
-		file.print $winning_word.each {|i| "#{i}"}
-		file.print $current.each {|i| "#{i}"}
+	save_hash = {guesses: $number_of_guesses, winning: $winning_word, current: $current}
+	File.open("save.yml", "w+") { |file|
+		file.puts YAML::dump(save_hash)
 	}
+	puts "SAVED"
+	File.close
 end
 
 def load_game
-	saved_variables = File.read "save.txt"
-	saved_variables.split("\n")
-	$number_of_guesses = saved_variables[0]
-	$winning_word = saved_variables[1].split(",")
-	$current = saved_variables[2].split(",")
-	puts $current
-	puts $winning_word
-	puts $number_of_guesses
+	saved_variables = File.open("save.yml").readlines.each do |lines|
+		puts lines
+	end
 end
 
 
 
+load_game
 
 
-
-loop do
-	draw_board
-	user_input
-	letter_checker
-	draw_noose
-end
+# loop do
+# 	draw_board
+# 	choose_word
+# 	user_input
+# 	letter_checker
+# 	draw_noose
+# end
